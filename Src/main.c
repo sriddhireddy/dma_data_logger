@@ -20,15 +20,31 @@ int main(void)
 
     while(1)
     {
-        if(DMA_HalfTransferComplete())
-        {
-            UART_WriteString("HALF\r\n");
-        }
+    	if(DMA_HalfTransferComplete())
+    	{
+    	    UART_WriteString("First half: ");
 
-        if(DMA_TransferComplete())
-        {
-            UART_WriteString("FULL\r\n");
-        }
+    	    for(int i = 0; i < 4; i++)
+    	    {
+    	        UART_WriteInt(adc_buffer[i]);
+    	        UART_WriteString(" ");
+    	    }
+
+    	    UART_WriteString("\r\n");
+    	}
+
+    	if(DMA_TransferComplete())
+    	{
+    	    UART_WriteString("Second half: ");
+
+    	    for(int i = 4; i < 8; i++)
+    	    {
+    	        UART_WriteInt(adc_buffer[i]);
+    	        UART_WriteString(" ");
+    	    }
+
+    	    UART_WriteString("\r\n");
+    	}
     }
 }
 
