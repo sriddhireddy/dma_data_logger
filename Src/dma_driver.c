@@ -11,7 +11,10 @@
 #define DMA_CR_CIRC		(1U<<8)
 #define DMA_CR_TCIE		(1U<<4)
 
+#define DMA_LIFCR_CTCIF		(1U<<5)
+#define DMA_LISR_TCIF		(1U<<5)
 
+static volatile uint8_t dma_transfer_complete = 0;
 
 void dma2_stream0_init(uint32_t src, uint32_t dst, uint32_t len)
 {
@@ -61,12 +64,34 @@ void dma2_stream0_init(uint32_t src, uint32_t dst, uint32_t len)
 	DMA2_Stream0->FCR = 0;
 
     /* enable dma transfer complete interrupt */
-	//DMA2_Stream0->CR |= DMA_CR_TCIE;
+	DMA2_Stream0->CR |= DMA_CR_TCIE;
 
     /* enable dma2 stream0 */
 	DMA2_Stream0->CR |= DMA_CR_EN;
 
     /* enable dma2 stream0 interrupt in NVIC */
-	//NVIC_EnableIRQ(DMA2_Stream0_IRQn);
+	NVIC_EnableIRQ(DMA2_Stream0_IRQn);
 
 }
+
+void DMA2_Stream0_IRQHandler(void)
+{
+    /* check if transfer complete flag is set */
+	if(DMA2->LISR & DMA_LISR_TCIF){
+
+		/* clear transfer complete flag */
+		DMA2->LIFCR = DMA_LIFCR_CTCIF;
+
+		/* indicate that DMA transfer is complete */
+		dma_transfer_complete = 1;
+	}
+
+}
+
+uint8_t DMA_TransferComplete(void){
+		if(dma_transfer_complete){
+			dma_transfer_complete = 0;
+			return 1;
+		}
+		return 0;
+	}

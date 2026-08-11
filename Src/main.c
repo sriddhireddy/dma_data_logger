@@ -19,17 +19,18 @@ int main(void)
 
     while(1)
     {
-        UART_WriteString("Samples:\r\n");
-
-        for(int i = 0; i < 8; i++)
+        if(DMA_TransferComplete())
         {
-            UART_WriteInt(adc_buffer[i]);
+            UART_WriteString("DMA COMPLETE\r\n");
+
+            for(int i = 0; i < 8; i++)
+            {
+                UART_WriteInt(adc_buffer[i]);
+                UART_WriteString("\r\n");
+            }
+
             UART_WriteString("\r\n");
         }
-
-        UART_WriteString("\r\n");
-
-        SysTick_DelayMs(1000);
     }
 }
 
@@ -41,3 +42,17 @@ int main(void)
 //        UART_WriteString("\r\n");
 //
 //        SysTick_DelayMs(500);
+
+// DMA TEST (without interrupt part)
+//        UART_WriteString("Samples:\r\n");
+//
+//        for(int i = 0; i < 8; i++)
+//        {
+//            UART_WriteInt(adc_buffer[i]);
+//            UART_WriteString("\r\n");
+//        }
+//
+//        UART_WriteString("\r\n");
+//
+//        SysTick_DelayMs(1000);
+
