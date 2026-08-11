@@ -45,6 +45,20 @@ int main(void)
 
     	    UART_WriteString("\r\n");
     	}
+    	if(DMA_TransferError())
+		{
+			UART_WriteString("Transfer Error Occurred\r\n");
+		}
+    	if(DMA_TransferError())
+		{
+			UART_WriteString("Direct Error Occurred\r\n");
+		}
+    	if(DMA_TransferError())
+		{
+			UART_WriteString("Fifo Error Occurred\r\n");
+		}
+
+
     }
 }
 

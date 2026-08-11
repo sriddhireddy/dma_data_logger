@@ -16,11 +16,24 @@
 #define DMA_LIFCR_CTCIF		(1U<<5)
 #define DMA_LISR_TCIF		(1U<<5)
 
-#define DMA_LIFCR_CHTIF    (1U<<4)
-#define DMA_LISR_HTIF      (1U<<4)
+#define DMA_LIFCR_CHTIF    	(1U<<4)
+#define DMA_LISR_HTIF      	(1U<<4)
+
+#define DMA_LISR_TEIF    	(1U<<3)
+#define DMA_LIFCR_CTEIF  	(1U<<3)
+
+#define DMA_LISR_DMEIF   	(1U<<2)
+#define DMA_LIFCR_CDMEIF 	(1U<<2)
+
+#define DMA_LISR_FEIF    	(1U<<0)
+#define DMA_LIFCR_CFEIF  	(1U<<0)
 
 static volatile uint8_t dma_transfer_complete = 0;
 static volatile uint8_t dma_half_transfer = 0;
+
+static volatile uint8_t dma_transfer_error = 0;
+static volatile uint8_t dma_direct_error = 0;
+static volatile uint8_t dma_fifo_error = 0;
 
 void DMA2_Stream0_Init(uint32_t src, uint32_t dst, uint32_t len)
 {
@@ -99,6 +112,25 @@ void DMA2_Stream0_IRQHandler(void)
         /* indicate transfer complete */
 		dma_transfer_complete = 1;
     }
+
+    if (DMA2->LISR & DMA_LISR_TEIF)
+    {
+        DMA2->LIFCR = DMA_LIFCR_CTEIF;
+        dma_transfer_error = 1;
+    }
+
+    if (DMA2->LISR & DMA_LISR_DMEIF)
+    {
+        DMA2->LIFCR = DMA_LIFCR_CDMEIF;
+        dma_direct_error = 1;
+    }
+
+    if (DMA2->LISR & DMA_LISR_FEIF)
+    {
+        DMA2->LIFCR = DMA_LIFCR_CFEIF;
+        dma_fifo_error = 1;
+    }
+
 }
 
 
@@ -113,6 +145,30 @@ uint8_t DMA_TransferComplete(void){
 uint8_t DMA_HalfTransferComplete(void){
 		if(dma_half_transfer){
 			dma_half_transfer = 0;
+			return 1;
+		}
+		return 0;
+	}
+
+uint8_t DMA_TransferError(void){
+		if(dma_transfer_error){
+			dma_transfer_error = 0;
+			return 1;
+		}
+		return 0;
+	}
+
+uint8_t DMA_DirectError(void){
+		if(dma_direct_error){
+			dma_direct_error = 0;
+			return 1;
+		}
+		return 0;
+	}
+
+uint8_t DMA_FifoError(void){
+		if(dma_fifo_error){
+			dma_fifo_error = 0;
 			return 1;
 		}
 		return 0;

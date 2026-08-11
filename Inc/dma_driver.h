@@ -9,6 +9,10 @@ void DMA2_Stream0_IRQHandler(void);
 uint8_t DMA_TransferComplete(void);
 uint8_t DMA_HalfTransferComplete(void);
 
+uint8_t DMA_TransferError(void);
+uint8_t DMA_DirectError(void);
+uint8_t DMA_FifoError(void);
+
 void DMA2_Stream0_Stop(void);
 void DMA2_Stream0_Start(void);
 
