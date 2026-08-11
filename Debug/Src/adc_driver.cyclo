@@ -1,0 +1,2 @@
+../Src/adc_driver.c:17:6:ADC_Init	1
+../Src/adc_driver.c:36:10:ADC_Read	2

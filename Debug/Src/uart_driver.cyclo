@@ -1,0 +1,4 @@
+../Src/uart_driver.c:19:6:UART_Init	1
+../Src/uart_driver.c:36:6:UART_WriteChar	2
+../Src/uart_driver.c:43:6:UART_WriteString	2
+../Src/uart_driver.c:51:6:UART_WriteInt	4

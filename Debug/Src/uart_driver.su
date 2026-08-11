@@ -1,0 +1,4 @@
+../Src/uart_driver.c:19:6:UART_Init	4	static
+../Src/uart_driver.c:36:6:UART_WriteChar	16	static
+../Src/uart_driver.c:43:6:UART_WriteString	16	static
+../Src/uart_driver.c:51:6:UART_WriteInt	40	static

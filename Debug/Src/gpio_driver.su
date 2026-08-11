@@ -1,0 +1,5 @@
+../Src/gpio_driver.c:12:6:GPIO_Init	4	static
+../Src/gpio_driver.c:29:6:GPIO_SetPin	4	static
+../Src/gpio_driver.c:33:6:GPIO_ResetPin	4	static
+../Src/gpio_driver.c:37:9:GPIO_ReadButton	4	static
+../Src/gpio_driver.c:41:9:GPIO_ButtonPressed	16	static
