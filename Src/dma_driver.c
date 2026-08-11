@@ -16,16 +16,13 @@
 
 static volatile uint8_t dma_transfer_complete = 0;
 
-void dma2_stream0_init(uint32_t src, uint32_t dst, uint32_t len)
+void DMA2_Stream0_Init(uint32_t src, uint32_t dst, uint32_t len)
 {
     /* enable clk access to dma */
 	RCC->AHB1ENR |= DMA2EN;
 
     /* disable dma2 stream0 */
-	DMA2_Stream0->CR &= ~(DMA_CR_EN);
-
-    /* wait while dma stream0 is disabled */
-	while(DMA2_Stream0->CR & DMA_CR_EN){}
+	DMA2_Stream0_Stop();
 
     /* clear all interrupt flags of Stream0 */
 	DMA2->LIFCR = (1U<<0) | (15U<<2);
@@ -67,7 +64,7 @@ void dma2_stream0_init(uint32_t src, uint32_t dst, uint32_t len)
 	DMA2_Stream0->CR |= DMA_CR_TCIE;
 
     /* enable dma2 stream0 */
-	DMA2_Stream0->CR |= DMA_CR_EN;
+	//in main
 
     /* enable dma2 stream0 interrupt in NVIC */
 	NVIC_EnableIRQ(DMA2_Stream0_IRQn);
@@ -95,3 +92,18 @@ uint8_t DMA_TransferComplete(void){
 		}
 		return 0;
 	}
+
+void DMA2_Stream0_Stop(void)
+{
+	/* disable dma2 stream0 */
+	DMA2_Stream0->CR &= ~(DMA_CR_EN);
+
+	/* wait while dma stream0 is disabled */
+	while(DMA2_Stream0->CR & DMA_CR_EN){}
+}
+
+void DMA2_Stream0_Start(void)
+{
+    /* enable dma2 stream0 */
+    DMA2_Stream0->CR |= DMA_CR_EN;
+}

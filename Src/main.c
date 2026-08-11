@@ -13,7 +13,8 @@ int main(void)
     SysTick_Init();
     ADC_Init();
 
-    dma2_stream0_init((uint32_t)&ADC1->DR,(uint32_t)adc_buffer,8);
+    DMA2_Stream0_Init((uint32_t)&ADC1->DR,(uint32_t)adc_buffer,8);
+    DMA2_Stream0_Start();
 
     ADC1->CR2 |= ADC_CR2_SWSTART;
 
