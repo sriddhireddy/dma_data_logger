@@ -37,6 +37,8 @@
 
 #define DMA_CR_DBM		(1U<<18)
 #define DMA_CR_CT		(1U<<19)
+//#define DMA_CR_CT_Pos    (19U)
+//#define DMA_CR_CT_Msk    (1U << DMA_CR_CT_Pos)
 
 
 #define DMA_FCR_DMDIS_Pos		(2U)
@@ -276,5 +278,15 @@ uint8_t DMA_FifoStatus(void){
 	status = (DMA2_Stream0->FCR & DMA_FCR_FS_Msk) >> DMA_FCR_FS_Pos;
 	//value = (REGISTER & FIELD_MASK) >> FIELD_POSITION;
 
+	return status;
+}
+
+uint8_t DMA_GetCompletedBuffer(){
+	uint8_t status = (DMA2_Stream0->CR & DMA_CR_CT) ? 0 : 1;
+	return status;
+}
+
+uint8_t DMA_GetCurrentBuffer(){
+	uint8_t status = (DMA2_Stream0->CR & DMA_CR_CT) ? 1 : 0;
 	return status;
 }

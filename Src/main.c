@@ -7,8 +7,6 @@
 volatile uint16_t adc_buffer0[8];
 volatile uint16_t adc_buffer1[8];
 
-#define DMA_CR_CT    (1U << 19)
-
 int main(void)
 {
     GPIO_Init();
@@ -25,10 +23,10 @@ int main(void)
     {
     	if(DMA_HalfTransferComplete())
     	{
-    		uint8_t current_target = (DMA2_Stream0->CR & DMA_CR_CT) ? 1 : 0;
+    		uint8_t current_buffer = DMA_GetCurrentBuffer();
     		uint16_t sum = 0;
 
-    		if(current_target == 0)
+    		if(current_buffer == 0)
 			{
 				UART_WriteString("Buffer 0 - First half: ");
 
@@ -70,14 +68,14 @@ int main(void)
 			 * CT = 1 → DMA is now filling Buffer 1
 			 *          therefore Buffer 0 just completed.
 			 */
-    		uint8_t current_target = (DMA2_Stream0->CR & DMA_CR_CT) ? 1 : 0;
+    		uint8_t completed_buffer = DMA_GetCompletedBuffer();
 			uint16_t sum = 0;
 
-			if(current_target == 0)
+			if(completed_buffer == 0)
 			{
 				UART_WriteString("Buffer 0 - Second half: ");
 
-				for(int i = 0; i < 4; i++)
+				for(int i = 4; i < 8; i++)
 				{
 					UART_WriteInt(adc_buffer1[i]);
 					UART_WriteString(" ");
@@ -89,7 +87,7 @@ int main(void)
 			{
 				UART_WriteString("Buffer 1 - Second half: ");
 
-				for(int i = 0; i < 4; i++)
+				for(int i = 4; i < 8; i++)
 				{
 					UART_WriteInt(adc_buffer0[i]);
 					UART_WriteString(" ");

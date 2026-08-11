@@ -17,5 +17,7 @@ void DMA2_Stream0_Stop(void);
 void DMA2_Stream0_Start(void);
 
 uint8_t DMA_FifoStatus(void);
+uint8_t DMA_GetCompletedBuffer();
+uint8_t DMA_GetCurrentBuffer();
 
 #endif /* DMA_DRIVER_H_ */
