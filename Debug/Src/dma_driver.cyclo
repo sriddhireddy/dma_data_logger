@@ -1,0 +1,2 @@
+D:/reddy/stm32_baremetal/mcu1_projects/chip_headers/CMSIS/Include/core_cm4.h:1684:22:__NVIC_EnableIRQ	2
+../Src/dma_driver.c:16:6:dma2_stream0_init	2

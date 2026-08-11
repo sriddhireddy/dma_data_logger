@@ -72,6 +72,58 @@ Discarded input sections
  .text          0x00000000        0x0 ./Src/adc_driver.o
  .data          0x00000000        0x0 ./Src/adc_driver.o
  .bss           0x00000000        0x0 ./Src/adc_driver.o
+ .group         0x00000000        0xc ./Src/dma_driver.o
+ .group         0x00000000        0xc ./Src/dma_driver.o
+ .group         0x00000000        0xc ./Src/dma_driver.o
+ .group         0x00000000        0xc ./Src/dma_driver.o
+ .group         0x00000000        0xc ./Src/dma_driver.o
+ .group         0x00000000        0xc ./Src/dma_driver.o
+ .group         0x00000000        0xc ./Src/dma_driver.o
+ .group         0x00000000        0xc ./Src/dma_driver.o
+ .group         0x00000000        0xc ./Src/dma_driver.o
+ .group         0x00000000        0xc ./Src/dma_driver.o
+ .group         0x00000000        0xc ./Src/dma_driver.o
+ .group         0x00000000        0xc ./Src/dma_driver.o
+ .group         0x00000000        0xc ./Src/dma_driver.o
+ .group         0x00000000        0xc ./Src/dma_driver.o
+ .group         0x00000000        0xc ./Src/dma_driver.o
+ .group         0x00000000        0xc ./Src/dma_driver.o
+ .text          0x00000000        0x0 ./Src/dma_driver.o
+ .data          0x00000000        0x0 ./Src/dma_driver.o
+ .bss           0x00000000        0x0 ./Src/dma_driver.o
+ .text.__NVIC_EnableIRQ
+                0x00000000       0x3c ./Src/dma_driver.o
+ .text.dma2_stream0_init
+                0x00000000       0xcc ./Src/dma_driver.o
+ .debug_info    0x00000000      0x742 ./Src/dma_driver.o
+ .debug_abbrev  0x00000000      0x14f ./Src/dma_driver.o
+ .debug_aranges
+                0x00000000       0x28 ./Src/dma_driver.o
+ .debug_rnglists
+                0x00000000       0x1a ./Src/dma_driver.o
+ .debug_macro   0x00000000      0x114 ./Src/dma_driver.o
+ .debug_macro   0x00000000      0xaea ./Src/dma_driver.o
+ .debug_macro   0x00000000       0x28 ./Src/dma_driver.o
+ .debug_macro   0x00000000       0x28 ./Src/dma_driver.o
+ .debug_macro   0x00000000       0x22 ./Src/dma_driver.o
+ .debug_macro   0x00000000       0x8e ./Src/dma_driver.o
+ .debug_macro   0x00000000       0x51 ./Src/dma_driver.o
+ .debug_macro   0x00000000      0x103 ./Src/dma_driver.o
+ .debug_macro   0x00000000       0x6a ./Src/dma_driver.o
+ .debug_macro   0x00000000      0x1df ./Src/dma_driver.o
+ .debug_macro   0x00000000       0x1c ./Src/dma_driver.o
+ .debug_macro   0x00000000       0x22 ./Src/dma_driver.o
+ .debug_macro   0x00000000       0xfb ./Src/dma_driver.o
+ .debug_macro   0x00000000     0x1011 ./Src/dma_driver.o
+ .debug_macro   0x00000000      0x11f ./Src/dma_driver.o
+ .debug_macro   0x00000000    0x16749 ./Src/dma_driver.o
+ .debug_macro   0x00000000       0x6d ./Src/dma_driver.o
+ .debug_line    0x00000000      0x5ee ./Src/dma_driver.o
+ .debug_str     0x00000000    0x8b8d0 ./Src/dma_driver.o
+ .comment       0x00000000       0x44 ./Src/dma_driver.o
+ .debug_frame   0x00000000       0x58 ./Src/dma_driver.o
+ .ARM.attributes
+                0x00000000       0x34 ./Src/dma_driver.o
  .group         0x00000000        0xc ./Src/gpio_driver.o
  .group         0x00000000        0xc ./Src/gpio_driver.o
  .group         0x00000000        0xc ./Src/gpio_driver.o
@@ -666,6 +718,7 @@ LOAD C:/ST/STM32CubeIDE_2.2.0/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.exte
 LOAD C:/ST/STM32CubeIDE_2.2.0/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.14.3.rel1.win32_1.0.100.202602081740/tools/bin/../lib/gcc/arm-none-eabi/14.3.1/thumb/v7e-m+fp/hard/crtbegin.o
 LOAD C:/ST/STM32CubeIDE_2.2.0/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.14.3.rel1.win32_1.0.100.202602081740/tools/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/crt0.o
 LOAD ./Src/adc_driver.o
+LOAD ./Src/dma_driver.o
 LOAD ./Src/gpio_driver.o
 LOAD ./Src/main.o
 LOAD ./Src/syscalls.o
