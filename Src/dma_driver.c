@@ -35,6 +35,9 @@
 #define DMA_CR_PBURST_Pos    (21U)
 #define DMA_CR_PBURST_Msk    (3U << DMA_CR_PBURST_Pos)
 
+#define DMA_CR_DBM		(1U<<18)
+#define DMA_CR_CT		(1U<<19)
+
 
 #define DMA_FCR_DMDIS_Pos		(2U)
 #define DMA_FCR_DMDIS_Msk		(1U << DMA_FCR_DMDIS_Pos)
@@ -59,6 +62,8 @@
 #define DMA_LIFCR_CFEIF  	(1U<<0)
 
 
+
+
 static volatile uint8_t dma_transfer_complete = 0;
 static volatile uint8_t dma_half_transfer = 0;
 
@@ -68,7 +73,7 @@ static volatile uint8_t dma_fifo_error = 0;
 
 //NOTE: clear-set for multi bit and directly set for single bit
 
-void DMA2_Stream0_Init(uint32_t src, uint32_t dst, uint32_t len)
+void DMA2_Stream0_Init(uint32_t src, uint32_t dst0, uint32_t dst1, uint32_t len)
 {
     /* enable clk access to dma */
 	RCC->AHB1ENR |= DMA2EN;
@@ -91,7 +96,19 @@ void DMA2_Stream0_Init(uint32_t src, uint32_t dst, uint32_t len)
 	DMA2_Stream0->PAR = src;
 
     /* set memory address */
-	DMA2_Stream0->M0AR = dst;
+//	DMA2_Stream0->M0AR = dst;
+
+	/* set Memory 0 address */
+	DMA2_Stream0->M0AR = dst0;
+
+	/* set Memory 1 address */
+	DMA2_Stream0->M1AR = dst1;
+
+	/* enable double-buffer mode */
+	DMA2_Stream0->CR |= DMA_CR_DBM;
+
+	/* configure initial current target as Memory 0 */
+	DMA2_Stream0->CR &= ~(DMA_CR_CT);
 
     /* set transfer length */
 	DMA2_Stream0->NDTR = len;

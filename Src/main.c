@@ -4,7 +4,10 @@
 #include "adc_driver.h"
 #include "dma_driver.h"
 
-volatile uint16_t adc_buffer[8];
+volatile uint16_t adc_buffer0[8];
+volatile uint16_t adc_buffer1[8];
+
+#define DMA_CR_CT    (1U << 19)
 
 int main(void)
 {
@@ -13,50 +16,94 @@ int main(void)
     SysTick_Init();
     ADC_Init();
 
-    DMA2_Stream0_Init((uint32_t)&ADC1->DR,(uint32_t)adc_buffer,8);
+    DMA2_Stream0_Init((uint32_t)&ADC1->DR,(uint32_t)adc_buffer0,(uint32_t)adc_buffer1,8);
     DMA2_Stream0_Start();
 
     ADC1->CR2 |= ADC_CR2_SWSTART;
-
-
 
     while(1)
     {
     	if(DMA_HalfTransferComplete())
     	{
-    	    UART_WriteString("First half: ");
-    	    uint16_t sum1 = 0;
+    		uint8_t current_target = (DMA2_Stream0->CR & DMA_CR_CT) ? 1 : 0;
+    		uint16_t sum = 0;
 
-    	    for(int i = 0; i < 4; i++)
-    	    {
-    	        UART_WriteInt(adc_buffer[i]);
-    	        UART_WriteString(" ");
-    	    	sum1 += adc_buffer[i];
-    	    }
-    	    UART_WriteString("\r\n");
+    		if(current_target == 0)
+			{
+				UART_WriteString("Buffer 0 - First half: ");
 
-    	    UART_WriteString("average1:");
-    	    UART_WriteInt(sum1/4);
-    	    UART_WriteString("\r\n");
+				for(int i = 0; i < 4; i++)
+				{
+					UART_WriteInt(adc_buffer0[i]);
+					UART_WriteString(" ");
+
+					sum += adc_buffer0[i];
+				}
+			}
+			else
+			{
+				UART_WriteString("Buffer 1 - First half: ");
+
+				for(int i = 0; i < 4; i++)
+				{
+					UART_WriteInt(adc_buffer1[i]);
+					UART_WriteString(" ");
+
+					sum += adc_buffer1[i];
+				}
+			}
+    		UART_WriteString("\r\n");
+
+			UART_WriteString("Average: ");
+			UART_WriteInt(sum / 4);
+			UART_WriteString("\r\n");
     	}
 
     	if(DMA_TransferComplete())
     	{
-    	    UART_WriteString("Second half: ");
-    	    uint16_t sum2 = 0;
+    		/*
+			 * At TC, DMA has already switched buffers.
+			 *
+			 * CT = 0 → DMA is now filling Buffer 0
+			 *          therefore Buffer 1 just completed.
+			 *
+			 * CT = 1 → DMA is now filling Buffer 1
+			 *          therefore Buffer 0 just completed.
+			 */
+    		uint8_t current_target = (DMA2_Stream0->CR & DMA_CR_CT) ? 1 : 0;
+			uint16_t sum = 0;
 
-    	    for(int i = 4; i < 8; i++)
-    	    {
-    	        UART_WriteInt(adc_buffer[i]);
-    	        UART_WriteString(" ");
-    	        sum2 += adc_buffer[i];
-    	    }
-    	    UART_WriteString("\r\n");
+			if(current_target == 0)
+			{
+				UART_WriteString("Buffer 0 - Second half: ");
 
-    	    UART_WriteString("average2:");
-    	    UART_WriteInt(sum2/4);
-    	    UART_WriteString("\r\n");
+				for(int i = 0; i < 4; i++)
+				{
+					UART_WriteInt(adc_buffer1[i]);
+					UART_WriteString(" ");
+
+					sum += adc_buffer1[i];
+				}
+			}
+			else
+			{
+				UART_WriteString("Buffer 1 - Second half: ");
+
+				for(int i = 0; i < 4; i++)
+				{
+					UART_WriteInt(adc_buffer0[i]);
+					UART_WriteString(" ");
+
+					sum += adc_buffer0[i];
+				}
+			}
+			UART_WriteString("\r\n");
+
+			UART_WriteString("Average: ");
+			UART_WriteInt(sum / 4);
+			UART_WriteString("\r\n");
     	}
+
     	if(DMA_TransferError())
 		{
 			UART_WriteString("Transfer Error Occurred\r\n");

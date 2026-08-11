@@ -4,7 +4,7 @@
 
 #include "stm32f4xx.h"
 
-void DMA2_Stream0_Init(uint32_t src, uint32_t dst, uint32_t len);
+void DMA2_Stream0_Init(uint32_t src, uint32_t dst0, uint32_t dst1, uint32_t len);
 void DMA2_Stream0_IRQHandler(void);
 uint8_t DMA_TransferComplete(void);
 uint8_t DMA_HalfTransferComplete(void);
