@@ -23,37 +23,47 @@ int main(void)
     	if(DMA_HalfTransferComplete())
     	{
     	    UART_WriteString("First half: ");
+    	    uint16_t sum1 = 0;
 
     	    for(int i = 0; i < 4; i++)
     	    {
     	        UART_WriteInt(adc_buffer[i]);
     	        UART_WriteString(" ");
+    	    	sum1 += adc_buffer[i];
     	    }
+    	    UART_WriteString("\r\n");
 
+    	    UART_WriteString("average1:");
+    	    UART_WriteInt(sum1/4);
     	    UART_WriteString("\r\n");
     	}
 
     	if(DMA_TransferComplete())
     	{
     	    UART_WriteString("Second half: ");
+    	    uint16_t sum2 = 0;
 
     	    for(int i = 4; i < 8; i++)
     	    {
     	        UART_WriteInt(adc_buffer[i]);
     	        UART_WriteString(" ");
+    	        sum2 += adc_buffer[i];
     	    }
+    	    UART_WriteString("\r\n");
 
+    	    UART_WriteString("average2:");
+    	    UART_WriteInt(sum2/4);
     	    UART_WriteString("\r\n");
     	}
     	if(DMA_TransferError())
 		{
 			UART_WriteString("Transfer Error Occurred\r\n");
 		}
-    	if(DMA_TransferError())
+    	if(DMA_DirectError())
 		{
 			UART_WriteString("Direct Error Occurred\r\n");
 		}
-    	if(DMA_TransferError())
+    	if(DMA_FifoError())
 		{
 			UART_WriteString("Fifo Error Occurred\r\n");
 		}
