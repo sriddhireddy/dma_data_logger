@@ -190,13 +190,13 @@ Average: XXXX
 
 ## Images
 
-### Hardware Setup
+### UART Output GND
 
 <p align="center">
   <img src="images/dma_uart_output_gnd.png" alt="DMA UART Output GND" width="700">
 </p>
 
-### UART Output
+### UART Output 3.3v
 
 <p align="center">
   <img src="images/dma_uart_output_3v3.png" alt="DMA UART Output 3.3V" width="700">
@@ -233,9 +233,10 @@ This project strengthened understanding of:
 
 ## Author
 
-**Riddhi Sridhar**
-Electronics and Communication Engineering
+**S Riddhi Reddy**
+
+Electronics and Communication Engineering  
 RV College of Engineering
 
-```
+---
 ```
