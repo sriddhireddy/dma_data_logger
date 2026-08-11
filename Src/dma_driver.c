@@ -31,7 +31,8 @@
 #define DMA_FCR_DMDIS_Msk		(1U << DMA_FCR_DMDIS_Pos)
 #define DMA_FCR_FTH_Pos			(0U)
 #define DMA_FCR_FTH_Msk			(3U << DMA_FCR_FTH_Pos)
-
+#define DMA_FCR_FS_Pos			(3U)
+#define DMA_FCR_FS_Msk			(7U << DMA_FCR_FS_Pos)
 
 #define DMA_LIFCR_CTCIF		(1U<<5)
 #define DMA_LISR_TCIF		(1U<<5)
@@ -47,6 +48,7 @@
 
 #define DMA_LISR_FEIF    	(1U<<0)
 #define DMA_LIFCR_CFEIF  	(1U<<0)
+
 
 static volatile uint8_t dma_transfer_complete = 0;
 static volatile uint8_t dma_half_transfer = 0;
@@ -230,4 +232,14 @@ void DMA2_Stream0_Start(void)
 {
     /* enable dma2 stream0 */
     DMA2_Stream0->CR |= DMA_CR_EN;
+}
+
+
+uint8_t DMA_FifoStatus(void){
+	uint8_t status;
+
+	status = (DMA2_Stream0->FCR & DMA_FCR_FS_Msk) >> DMA_FCR_FS_Pos;
+	//value = (REGISTER & FIELD_MASK) >> FIELD_POSITION;
+
+	return status;
 }

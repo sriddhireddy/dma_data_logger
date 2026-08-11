@@ -18,6 +18,8 @@ int main(void)
 
     ADC1->CR2 |= ADC_CR2_SWSTART;
 
+
+
     while(1)
     {
     	if(DMA_HalfTransferComplete())
@@ -67,6 +69,14 @@ int main(void)
 		{
 			UART_WriteString("Fifo Error Occurred\r\n");
 		}
+
+
+    	uint8_t fifo_status = DMA_FifoStatus();
+
+    	UART_WriteString("FIFO Status: ");
+    	UART_WriteInt(fifo_status);
+    	UART_WriteString("\r\n");
+    	SysTick_DelayMs(500);
 
 
     }
