@@ -13,7 +13,10 @@
 #define DMA_CR_DIR_Msk      (3U << DMA_CR_DIR_Pos)
 
 #define DMA_CR_MINC		(1U<<10)
-#define DMA_CR_PINC		(0U<<9)		//default
+//#define DMA_CR_PINC		(0U<<9)		//default
+#define DMA_CR_PINC_Pos    9U
+#define DMA_CR_PINC_Msk    (1U << DMA_CR_PINC_Pos)
+
 //#define DMA_CR_PSIZE	(1U<<11)
 #define DMA_CR_PSIZE_Pos    11U
 #define DMA_CR_PSIZE_Msk    (3U << DMA_CR_PSIZE_Pos)
@@ -25,6 +28,12 @@
 #define DMA_CR_CIRC		(1U<<8)
 #define DMA_CR_TCIE		(1U<<4)
 #define DMA_CR_HTIE		(1U<<3)
+
+#define DMA_CR_MBURST_Pos    (23U)
+#define DMA_CR_MBURST_Msk    (3U << DMA_CR_MBURST_Pos)
+
+#define DMA_CR_PBURST_Pos    (21U)
+#define DMA_CR_PBURST_Msk    (3U << DMA_CR_PBURST_Pos)
 
 
 #define DMA_FCR_DMDIS_Pos		(2U)
@@ -67,6 +76,14 @@ void DMA2_Stream0_Init(uint32_t src, uint32_t dst, uint32_t len)
     /* disable dma2 stream0 */
 	DMA2_Stream0_Stop();
 
+	/* configure memory burst as INCR4 */
+	DMA2_Stream0->CR &= ~DMA_CR_MBURST_Msk;
+	DMA2_Stream0->CR |= (1U << DMA_CR_MBURST_Pos);
+
+	/* configure peripheral burst as single transfer */
+	DMA2_Stream0->CR &= ~DMA_CR_PBURST_Msk;
+	DMA2_Stream0->CR |= (0U << DMA_CR_PBURST_Pos);
+
     /* clear all interrupt flags of Stream0 */
 	DMA2->LIFCR = (1U<<0) | (15U<<2);
 
@@ -93,7 +110,8 @@ void DMA2_Stream0_Init(uint32_t src, uint32_t dst, uint32_t len)
 	DMA2_Stream0->CR |= DMA_CR_MINC;
 
     /* disable peripheral increment */
-	DMA2_Stream0->CR |= DMA_CR_PINC;
+//	DMA2_Stream0->CR |= DMA_CR_PINC;
+	DMA2_Stream0->CR &= ~DMA_CR_PINC_Msk;
 
     /* configure peripheral data size as half-word */
 //	DMA2_Stream0->CR |= DMA_CR_PSIZE;
