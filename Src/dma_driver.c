@@ -1,6 +1,6 @@
 #include "dma_driver.h"
 
-#define DMA2EN			(1U<<2)
+#define DMA2EN			(1U<<22)
 #define DMA_CR_EN		(1U<<0)
 #define DMA_CR_CHSEL	(0U<<25) 	//default
 #define DMA_CR_DIR		(0U<<6) 	//default
@@ -61,12 +61,12 @@ void dma2_stream0_init(uint32_t src, uint32_t dst, uint32_t len)
 	DMA2_Stream0->FCR = 0;
 
     /* enable dma transfer complete interrupt */
-	DMA2_Stream0->CR |= DMA_CR_TCIE;
+	//DMA2_Stream0->CR |= DMA_CR_TCIE;
 
     /* enable dma2 stream0 */
 	DMA2_Stream0->CR |= DMA_CR_EN;
 
     /* enable dma2 stream0 interrupt in NVIC */
-	NVIC_EnableIRQ(DMA2_Stream0_IRQn);
+	//NVIC_EnableIRQ(DMA2_Stream0_IRQn);
 
 }

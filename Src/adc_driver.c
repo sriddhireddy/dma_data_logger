@@ -13,6 +13,10 @@
 //#define ADC_CR2_SWSTART		(1U<<30)
 //#define ADC_SR_EOC		(1U<<1)
 
+//#define ADC_CR2_DMA		(1U<<8)
+//#define ADC_CR2_DDS		(1U<<9)
+//#define ADC_CR2_CONT	(1U<<1)
+
 
 void ADC_Init(void){
 
@@ -28,8 +32,17 @@ void ADC_Init(void){
 	//turn on adc
 	ADC1->CR2 |= ADC_CR2_ADON;
 
-	//choose channel 1 [only 1 conversion thus SQR1:- L [3:0] = 0000 (default)]
+	//choose channel 0 [only 1 conversion thus SQR1:- L [3:0] = 0000 (default)]
 	ADC1->SQR3 = ADC_SQ1_CH0;
+
+	/* enable DMA mode */
+	ADC1->CR2 |= ADC_CR2_DMA;
+
+	/* enable DMA requests to continue */
+	ADC1->CR2 |= ADC_CR2_DDS;
+
+	/* enable continuous conversion */
+	ADC1->CR2 |= ADC_CR2_CONT;
 
 }
 

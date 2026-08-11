@@ -2,6 +2,9 @@
 #include "uart_driver.h"
 #include "systick_driver.h"
 #include "adc_driver.h"
+#include "dma_driver.h"
+
+volatile uint16_t adc_buffer[8];
 
 int main(void)
 {
@@ -10,14 +13,31 @@ int main(void)
     SysTick_Init();
     ADC_Init();
 
+    dma2_stream0_init((uint32_t)&ADC1->DR,(uint32_t)adc_buffer,8);
+
+    ADC1->CR2 |= ADC_CR2_SWSTART;
+
     while(1)
     {
-        uint16_t value = ADC_Read();
+        UART_WriteString("Samples:\r\n");
 
-        UART_WriteString("ADC: ");
-        UART_WriteInt(value);
+        for(int i = 0; i < 8; i++)
+        {
+            UART_WriteInt(adc_buffer[i]);
+            UART_WriteString("\r\n");
+        }
+
         UART_WriteString("\r\n");
 
-        SysTick_DelayMs(500);
+        SysTick_DelayMs(1000);
     }
 }
+
+// ADC TEST
+//        uint16_t value = ADC_Read();
+//
+//        UART_WriteString("ADC: ");
+//        UART_WriteInt(value);
+//        UART_WriteString("\r\n");
+//
+//        SysTick_DelayMs(500);
