@@ -10,11 +10,17 @@
 #define DMA_CR_MSIZE	(1U<<13)
 #define DMA_CR_CIRC		(1U<<8)
 #define DMA_CR_TCIE		(1U<<4)
+#define DMA_CR_HTIE		(1U<<3)
+
 
 #define DMA_LIFCR_CTCIF		(1U<<5)
 #define DMA_LISR_TCIF		(1U<<5)
 
+#define DMA_LIFCR_CHTIF    (1U<<4)
+#define DMA_LISR_HTIF      (1U<<4)
+
 static volatile uint8_t dma_transfer_complete = 0;
+static volatile uint8_t dma_half_transfer = 0;
 
 void DMA2_Stream0_Init(uint32_t src, uint32_t dst, uint32_t len)
 {
@@ -63,6 +69,9 @@ void DMA2_Stream0_Init(uint32_t src, uint32_t dst, uint32_t len)
     /* enable dma transfer complete interrupt */
 	DMA2_Stream0->CR |= DMA_CR_TCIE;
 
+	/* enable dma half transfer interrupt */
+	DMA2_Stream0->CR |= DMA_CR_HTIE;
+
     /* enable dma2 stream0 */
 	//in main
 
@@ -73,21 +82,37 @@ void DMA2_Stream0_Init(uint32_t src, uint32_t dst, uint32_t len)
 
 void DMA2_Stream0_IRQHandler(void)
 {
-    /* check if transfer complete flag is set */
-	if(DMA2->LISR & DMA_LISR_TCIF){
+    if(DMA2->LISR & DMA_LISR_HTIF)
+    {
+        /* clear half-transfer flag */
+    	DMA2->LIFCR = DMA_LIFCR_CHTIF;
 
-		/* clear transfer complete flag */
+        /* indicate half-transfer */
+    	dma_half_transfer = 1;
+    }
+
+    if(DMA2->LISR & DMA_LISR_TCIF)
+    {
+        /* clear transfer-complete flag */
 		DMA2->LIFCR = DMA_LIFCR_CTCIF;
 
-		/* indicate that DMA transfer is complete */
+        /* indicate transfer complete */
 		dma_transfer_complete = 1;
-	}
-
+    }
 }
+
 
 uint8_t DMA_TransferComplete(void){
 		if(dma_transfer_complete){
 			dma_transfer_complete = 0;
+			return 1;
+		}
+		return 0;
+	}
+
+uint8_t DMA_HalfTransferComplete(void){
+		if(dma_half_transfer){
+			dma_half_transfer = 0;
 			return 1;
 		}
 		return 0;
